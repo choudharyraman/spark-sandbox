@@ -116,7 +116,7 @@ export function SandboxView({
 
               <Button variant="success" size="sm" onClick={onForkProject} className="gap-2">
                 <Rocket className="w-4 h-4" />
-                Create project
+                Go Live
               </Button>
             </div>
           </div>
@@ -218,7 +218,7 @@ export function SandboxView({
                     onClick={onForkProject}
                   >
                     <Rocket className="w-4 h-4" />
-                    Create project
+                    Go Live
                     <ChevronRight className="w-4 h-4 ml-auto" />
                   </Button>
                 </div>

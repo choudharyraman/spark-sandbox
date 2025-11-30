@@ -81,6 +81,8 @@ export interface Project {
   proofPageUrl?: string;
   createdAt: Date;
   updatedAt: Date;
+  creditsEarned?: number;
+  isInPortfolio?: boolean;
 }
 
 export interface ProofPage {
@@ -98,7 +100,20 @@ export interface ProofPage {
     direct: string;
     twitter: string;
     linkedin: string;
+    portfolio: string;
   };
+  creditsEarned: number;
+}
+
+export interface Prototype {
+  id: string;
+  name: string;
+  description: string;
+  templateId?: string;
+  prompt?: string;
+  status: 'generating' | 'ready' | 'error';
+  previewUrl: string;
+  createdAt: Date;
 }
 
 // Analytics tracking types

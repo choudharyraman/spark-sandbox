@@ -3,24 +3,34 @@ import { Template } from '@/types/sandbox';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Database, Sparkles, Server, CheckCircle2, Loader2 } from 'lucide-react';
+import { Database, Sparkles, Server, CheckCircle2, Loader2, Wand2, Layout, Code } from 'lucide-react';
 
 interface SandboxCreationModalProps {
   open: boolean;
   template: Template | null;
   onComplete: () => void;
+  mode?: 'sandbox' | 'prototype';
 }
 
-const creationSteps = [
+const sandboxSteps = [
   { id: 'env', label: 'Creating sandbox environment', icon: Server, duration: 800 },
   { id: 'schema', label: 'Setting up database schema', icon: Database, duration: 700 },
   { id: 'data', label: 'Generating realistic test data', icon: Sparkles, duration: 1000 },
 ];
 
-export function SandboxCreationModal({ open, template, onComplete }: SandboxCreationModalProps) {
+const prototypeSteps = [
+  { id: 'analyze', label: 'Analyzing your requirements', icon: Wand2, duration: 1000 },
+  { id: 'design', label: 'Designing UI components', icon: Layout, duration: 1200 },
+  { id: 'build', label: 'Building your prototype', icon: Code, duration: 800 },
+];
+
+export function SandboxCreationModal({ open, template, onComplete, mode = 'sandbox' }: SandboxCreationModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+
+  const creationSteps = mode === 'prototype' ? prototypeSteps : sandboxSteps;
+  const isPrototype = mode === 'prototype';
 
   useEffect(() => {
     if (!open) {
@@ -61,9 +71,7 @@ export function SandboxCreationModal({ open, template, onComplete }: SandboxCrea
       clearInterval(progressInterval);
       clearTimeout(completeTimeout);
     };
-  }, [open, onComplete]);
-
-  if (!template) return null;
+  }, [open, onComplete, creationSteps]);
 
   return (
     <Dialog open={open}>
@@ -71,21 +79,28 @@ export function SandboxCreationModal({ open, template, onComplete }: SandboxCrea
         <div className="text-center py-4">
           {/* Animated icon */}
           <div className="relative w-20 h-20 mx-auto mb-6">
-            <div className="absolute inset-0 rounded-full bg-sandbox/20 animate-ping" />
-            <div className="relative w-20 h-20 rounded-full gradient-sandbox flex items-center justify-center">
-              <Sparkles className="w-10 h-10 text-sandbox-foreground" />
+            <div className={`absolute inset-0 rounded-full ${isPrototype ? 'bg-primary/20' : 'bg-sandbox/20'} animate-ping`} />
+            <div className={`relative w-20 h-20 rounded-full ${isPrototype ? 'gradient-primary' : 'gradient-sandbox'} flex items-center justify-center`}>
+              {isPrototype ? (
+                <Wand2 className="w-10 h-10 text-primary-foreground" />
+              ) : (
+                <Sparkles className="w-10 h-10 text-sandbox-foreground" />
+              )}
             </div>
           </div>
 
-          <Badge variant="sandbox" className="mb-4">
-            Creating Sandbox
+          <Badge variant={isPrototype ? 'default' : 'sandbox'} className="mb-4">
+            {isPrototype ? 'Building Prototype' : 'Creating Sandbox'}
           </Badge>
 
           <h3 className="font-display text-xl font-semibold mb-2">
-            Spinning up your sandbox
+            {isPrototype ? 'Building your prototype' : 'Spinning up your sandbox'}
           </h3>
           <p className="text-muted-foreground text-sm mb-6">
-            Setting up {template.name} with test data
+            {isPrototype 
+              ? 'AI is generating your application...'
+              : template ? `Setting up ${template.name} with test data` : 'Setting up your sandbox...'
+            }
           </p>
 
           {/* Progress bar */}

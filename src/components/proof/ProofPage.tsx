@@ -14,7 +14,10 @@ import {
   Sparkles,
   Rocket,
   Globe,
-  ArrowRight
+  ArrowRight,
+  Coins,
+  Trophy,
+  Users
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -22,10 +25,12 @@ interface ProofPageViewProps {
   project: Project;
   proofPage: ProofPageType;
   onClose: () => void;
+  onShareToPortfolio: () => void;
 }
 
-export function ProofPageView({ project, proofPage, onClose }: ProofPageViewProps) {
+export function ProofPageView({ project, proofPage, onClose, onShareToPortfolio }: ProofPageViewProps) {
   const [copied, setCopied] = useState(false);
+  const [addedToPortfolio, setAddedToPortfolio] = useState(project.isInPortfolio || false);
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(proofPage.shareLinks.direct);
@@ -45,12 +50,39 @@ export function ProofPageView({ project, proofPage, onClose }: ProofPageViewProp
     window.open(proofPage.shareLinks.linkedin, '_blank');
   };
 
+  const handleAddToPortfolio = () => {
+    setAddedToPortfolio(true);
+    onShareToPortfolio();
+    toast({
+      title: "Added to Lovable Portfolio!",
+      description: `You earned ${proofPage.creditsEarned} credits for sharing.`,
+    });
+  };
+
   return (
     <div className="min-h-screen gradient-hero">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto">
+          {/* Credits earned banner */}
+          <Card className="p-4 mb-8 border-sandbox/30 bg-gradient-to-r from-sandbox/10 to-primary/10 animate-fade-in">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-sandbox/20 flex items-center justify-center">
+                  <Coins className="w-6 h-6 text-sandbox" />
+                </div>
+                <div>
+                  <p className="font-display font-bold text-lg">+{proofPage.creditsEarned} Credits Earned!</p>
+                  <p className="text-sm text-muted-foreground">For publishing your project</p>
+                </div>
+              </div>
+              <Badge variant="sandbox-solid" className="text-lg px-4 py-1">
+                {proofPage.creditsEarned} 💎
+              </Badge>
+            </div>
+          </Card>
+
           {/* Success header */}
-          <div className="text-center mb-12 animate-fade-in">
+          <div className="text-center mb-12 animate-fade-in" style={{ animationDelay: '0.1s' }}>
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full gradient-success mb-6">
               <Rocket className="w-10 h-10 text-success-foreground" />
             </div>
@@ -161,17 +193,52 @@ export function ProofPageView({ project, proofPage, onClose }: ProofPageViewProp
               </Button>
             </div>
 
-            {/* Add to showcase */}
-            <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10">
-              <div className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-primary" />
-                <div className="flex-1">
-                  <p className="font-medium">Add to Lovable Showcase</p>
-                  <p className="text-sm text-muted-foreground">Get featured and inspire others</p>
+            {/* Add to Lovable Portfolio - Primary CTA */}
+            <div className={`mt-6 p-5 rounded-xl border-2 transition-all ${
+              addedToPortfolio 
+                ? 'bg-success/10 border-success/30' 
+                : 'bg-gradient-to-r from-sandbox/10 to-primary/10 border-sandbox/30 hover:border-sandbox/50'
+            }`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
+                  addedToPortfolio ? 'bg-success/20' : 'gradient-sandbox'
+                }`}>
+                  {addedToPortfolio ? (
+                    <Check className="w-7 h-7 text-success" />
+                  ) : (
+                    <Trophy className="w-7 h-7 text-sandbox-foreground" />
+                  )}
                 </div>
-                <Button variant="outline" size="sm">
-                  Submit
-                </Button>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="font-display font-bold text-lg">
+                      {addedToPortfolio ? 'Added to Lovable Portfolio!' : 'Share to Lovable Portfolio'}
+                    </p>
+                    {!addedToPortfolio && (
+                      <Badge variant="sandbox" className="gap-1">
+                        <Coins className="w-3 h-3" />
+                        +5 Credits
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {addedToPortfolio 
+                      ? 'Your project is now visible in the public showcase!'
+                      : 'Get featured in our public showcase and earn 5 bonus credits'
+                    }
+                  </p>
+                </div>
+                {!addedToPortfolio && (
+                  <Button 
+                    variant="sandbox" 
+                    size="lg" 
+                    onClick={handleAddToPortfolio}
+                    className="gap-2"
+                  >
+                    <Users className="w-4 h-4" />
+                    Go Public
+                  </Button>
+                )}
               </div>
             </div>
           </Card>
