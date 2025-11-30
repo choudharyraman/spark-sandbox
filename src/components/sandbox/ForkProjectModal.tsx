@@ -13,7 +13,9 @@ import {
   CheckCircle2, 
   ArrowRight,
   Loader2,
-  Sparkles
+  Sparkles,
+  Coins,
+  Globe
 } from 'lucide-react';
 
 interface ForkProjectModalProps {
@@ -62,13 +64,16 @@ export function ForkProjectModal({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-              <Rocket className="w-5 h-5 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-lg gradient-success flex items-center justify-center">
+              <Rocket className="w-5 h-5 text-success-foreground" />
             </div>
             <div>
-              <Badge variant="success" className="mb-1">Almost there!</Badge>
+              <Badge variant="success" className="mb-1 gap-1">
+                <Coins className="w-3 h-3" />
+                +5 Credits
+              </Badge>
               <DialogTitle className="font-display text-xl">
-                Create your project
+                Go Live
               </DialogTitle>
             </div>
           </div>
@@ -136,15 +141,19 @@ export function ForkProjectModal({
             <ul className="text-sm text-muted-foreground space-y-1">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-success" />
-                Full Lovable project created from template
+                Your app goes live on lovable.app
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-success" />
-                Database and schema automatically configured
+                Get a shareable public URL instantly
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-success" />
-                One-click deploy to lovable.app
+                Earn 5 Lovable credits for publishing
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+                Option to feature in Lovable Portfolio
               </li>
             </ul>
           </div>
@@ -164,11 +173,12 @@ export function ForkProjectModal({
             {isForking ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Creating...
+                Going live...
               </>
             ) : (
               <>
-                Create project
+                <Globe className="w-4 h-4" />
+                Go Live
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

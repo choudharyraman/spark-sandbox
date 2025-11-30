@@ -1,12 +1,19 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Play, Sparkles, Zap, Shield, Clock } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowRight, Play, Sparkles, Zap, Shield, Clock, LayoutTemplate, MessageSquare } from 'lucide-react';
+import { PromptBuilder } from './PromptBuilder';
 
 interface HeroSectionProps {
   onExploreTemplates: () => void;
+  onBuildFromPrompt: (prompt: string) => void;
+  isGenerating?: boolean;
 }
 
-export function HeroSection({ onExploreTemplates }: HeroSectionProps) {
+export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGenerating = false }: HeroSectionProps) {
+  const [activeTab, setActiveTab] = useState<string>('templates');
+
   return (
     <section className="relative overflow-hidden gradient-hero pt-24 pb-16">
       {/* Background decoration */}
@@ -29,27 +36,51 @@ export function HeroSection({ onExploreTemplates }: HeroSectionProps) {
 
           {/* Headline */}
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold mb-6 animate-slide-up">
-            From template to{' '}
+            From idea to{' '}
             <span className="text-primary">production</span>
             {' '}in minutes
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            Stop watching tutorials. Start shipping. Every template comes with a sandbox — 
-            explore with realistic test data, customize, and deploy when you're ready.
+            Start from a template or describe your idea. Test in a sandbox with realistic data, 
+            customize everything, and go live when ready.
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <Button variant="hero" size="xl" onClick={onExploreTemplates} className="gap-2 w-full sm:w-auto">
-              <Sparkles className="w-5 h-5" />
-              Explore templates
-            </Button>
-            <Button variant="outline" size="xl" className="gap-2 w-full sm:w-auto">
-              <Play className="w-5 h-5" />
-              Watch how it works
-            </Button>
+          {/* Tab selector for Templates vs Build from Prompt */}
+          <div className="max-w-2xl mx-auto mb-8 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="templates" className="gap-2">
+                  <LayoutTemplate className="w-4 h-4" />
+                  Browse Templates
+                </TabsTrigger>
+                <TabsTrigger value="prompt" className="gap-2">
+                  <MessageSquare className="w-4 h-4" />
+                  Build from Prompt
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="templates" className="mt-0">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Button variant="hero" size="xl" onClick={onExploreTemplates} className="gap-2 w-full sm:w-auto">
+                    <Sparkles className="w-5 h-5" />
+                    Explore templates
+                  </Button>
+                  <Button variant="outline" size="xl" className="gap-2 w-full sm:w-auto">
+                    <Play className="w-5 h-5" />
+                    Watch how it works
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="prompt" className="mt-0">
+                <PromptBuilder 
+                  onSubmitPrompt={onBuildFromPrompt} 
+                  isGenerating={isGenerating}
+                />
+              </TabsContent>
+            </Tabs>
           </div>
 
           {/* Feature pills */}

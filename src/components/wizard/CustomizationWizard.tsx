@@ -156,7 +156,7 @@ export function CustomizationWizard({
               Ready to make it real?
             </h3>
             <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
-              Convert this sandbox into a full Lovable project. Your customizations and test data will be preserved.
+              Convert this sandbox into a live Lovable project. Your customizations and test data will be preserved.
             </p>
 
             <div className="space-y-3">
@@ -167,11 +167,11 @@ export function CustomizationWizard({
                 className="w-full gap-2"
               >
                 <Rocket className="w-5 h-5" />
-                Create my project
+                Go Live
               </Button>
               
               <p className="text-xs text-muted-foreground">
-                You'll be able to deploy it publicly in one click.
+                🎉 Earn 5 credits when you publish!
               </p>
             </div>
           </div>

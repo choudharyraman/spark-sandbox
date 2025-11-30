@@ -3,7 +3,7 @@ import { Template } from '@/types/sandbox';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { Play, Eye, Star, Users, ArrowRight } from 'lucide-react';
+import { Wand2, Eye, Users, ArrowRight, Sparkles } from 'lucide-react';
 
 interface TemplateCardProps {
   template: Template;
@@ -32,13 +32,13 @@ export function TemplateCard({ template, onTrySandbox, onPreview }: TemplateCard
         {/* Preview overlay on hover */}
         <div className={`absolute inset-0 bg-foreground/80 backdrop-blur-sm flex items-center justify-center gap-3 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
           <Button 
-            variant="sandbox" 
+            variant="hero" 
             size="sm"
             onClick={() => onTrySandbox(template)}
             className="gap-2"
           >
-            <Play className="w-4 h-4" />
-            Try with test data
+            <Wand2 className="w-4 h-4" />
+            Build Prototype
           </Button>
           <Button 
             variant="glass" 
@@ -101,7 +101,8 @@ export function TemplateCard({ template, onTrySandbox, onPreview }: TemplateCard
             className="gap-1 text-primary hover:text-primary"
             onClick={() => onTrySandbox(template)}
           >
-            Start sandbox
+            <Sparkles className="w-3.5 h-3.5" />
+            Try this template
             <ArrowRight className="w-3.5 h-3.5" />
           </Button>
         </div>

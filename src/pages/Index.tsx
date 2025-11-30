@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Template, Project, ProofPage, SandboxCustomizations } from '@/types/sandbox';
+import { Template, Project, ProofPage, SandboxCustomizations, Prototype } from '@/types/sandbox';
 import { mockTemplates } from '@/data/mockTemplates';
 import { useSandbox } from '@/hooks/useSandbox';
 import { Header } from '@/components/layout/Header';
@@ -11,8 +11,9 @@ import { SandboxCreationModal } from '@/components/sandbox/SandboxCreationModal'
 import { SandboxView } from '@/components/sandbox/SandboxView';
 import { ForkProjectModal } from '@/components/sandbox/ForkProjectModal';
 import { ProofPageView } from '@/components/proof/ProofPage';
+import { PrototypePreview } from '@/components/prototype/PrototypePreview';
 
-type AppState = 'gallery' | 'creating-sandbox' | 'sandbox' | 'forking' | 'deployed';
+type AppState = 'gallery' | 'generating-prototype' | 'prototype' | 'creating-sandbox' | 'sandbox' | 'forking' | 'deployed';
 
 const Index = () => {
   const [appState, setAppState] = useState<AppState>('gallery');
@@ -20,6 +21,8 @@ const Index = () => {
   const [showForkModal, setShowForkModal] = useState(false);
   const [deployedProject, setDeployedProject] = useState<Project | null>(null);
   const [proofPage, setProofPage] = useState<ProofPage | null>(null);
+  const [currentPrototype, setCurrentPrototype] = useState<Prototype | null>(null);
+  const [isGeneratingPrototype, setIsGeneratingPrototype] = useState(false);
 
   const {
     sandbox,
@@ -32,11 +35,77 @@ const Index = () => {
     destroySandbox,
   } = useSandbox();
 
+  // Handle template selection - goes to prototype first
   const handleSelectTemplate = useCallback(async (template: Template) => {
     setSelectedTemplate(template);
+    setIsGeneratingPrototype(true);
+    setAppState('generating-prototype');
+    
+    // Simulate prototype generation
+    setTimeout(() => {
+      const prototype: Prototype = {
+        id: `prototype-${Date.now()}`,
+        name: template.name,
+        description: template.description,
+        templateId: template.id,
+        status: 'ready',
+        previewUrl: `https://prototype-${template.id}.lovable.app`,
+        createdAt: new Date(),
+      };
+      setCurrentPrototype(prototype);
+      setIsGeneratingPrototype(false);
+      setAppState('prototype');
+    }, 2000);
+  }, []);
+
+  // Handle build from prompt
+  const handleBuildFromPrompt = useCallback(async (prompt: string) => {
+    setIsGeneratingPrototype(true);
+    setAppState('generating-prototype');
+    setSelectedTemplate(null);
+    
+    // Simulate AI prototype generation
+    setTimeout(() => {
+      const prototype: Prototype = {
+        id: `prototype-${Date.now()}`,
+        name: prompt.split(' ').slice(0, 3).join(' ') + '...',
+        description: prompt,
+        prompt: prompt,
+        status: 'ready',
+        previewUrl: `https://prototype-ai-${Date.now()}.lovable.app`,
+        createdAt: new Date(),
+      };
+      setCurrentPrototype(prototype);
+      setIsGeneratingPrototype(false);
+      setAppState('prototype');
+    }, 3000);
+  }, []);
+
+  // Handle "Test in Sandbox" click
+  const handleTestInSandbox = useCallback(async () => {
+    if (!currentPrototype) return;
+    
     setAppState('creating-sandbox');
-    await createSandbox(template);
-  }, [createSandbox]);
+    
+    // If we have a template, use it; otherwise create a generic sandbox
+    if (selectedTemplate) {
+      await createSandbox(selectedTemplate);
+    } else {
+      // Create sandbox from prompt-based prototype
+      const genericTemplate: Template = {
+        id: 'custom',
+        name: currentPrototype.name,
+        description: currentPrototype.description,
+        category: 'Custom',
+        thumbnail: '/placeholder.svg',
+        author: 'You',
+        popularity: 0,
+        tags: ['custom', 'ai-generated'],
+      };
+      setSelectedTemplate(genericTemplate);
+      await createSandbox(genericTemplate);
+    }
+  }, [currentPrototype, selectedTemplate, createSandbox]);
 
   const handleSandboxCreated = useCallback(() => {
     setAppState('sandbox');
@@ -45,8 +114,13 @@ const Index = () => {
   const handleBackToGallery = useCallback(() => {
     destroySandbox();
     setSelectedTemplate(null);
+    setCurrentPrototype(null);
     setAppState('gallery');
   }, [destroySandbox]);
+
+  const handleBackToPrototype = useCallback(() => {
+    setAppState('prototype');
+  }, []);
 
   const handleForkProject = useCallback(() => {
     setShowForkModal(true);
@@ -58,6 +132,8 @@ const Index = () => {
 
     // Simulate project creation and deployment
     setTimeout(() => {
+      const deployUrl = `https://${options.projectName.toLowerCase().replace(/\s+/g, '-')}.lovable.app`;
+      
       const project: Project = {
         id: `project-${Date.now()}`,
         name: options.projectName,
@@ -65,27 +141,31 @@ const Index = () => {
         sandboxId: sandbox?.id,
         templateId: selectedTemplate?.id,
         status: 'live',
-        deployUrl: `https://${options.projectName.toLowerCase().replace(/\s+/g, '-')}.lovable.app`,
+        deployUrl: deployUrl,
         createdAt: new Date(),
         updatedAt: new Date(),
+        creditsEarned: 5,
+        isInPortfolio: false,
       };
 
       const proof: ProofPage = {
         id: `proof-${Date.now()}`,
         projectId: project.id,
         title: options.projectName,
-        description: `Built with Lovable Smart Sandbox from the ${selectedTemplate?.name} template.`,
+        description: `Built with Lovable Smart Sandbox from the ${selectedTemplate?.name || 'custom'} template.`,
         thumbnailUrl: '/placeholder.svg',
-        liveUrl: project.deployUrl!,
-        templateAttribution: {
-          templateName: selectedTemplate?.name || '',
-          authorName: selectedTemplate?.author || '',
-        },
+        liveUrl: deployUrl,
+        templateAttribution: selectedTemplate ? {
+          templateName: selectedTemplate.name,
+          authorName: selectedTemplate.author,
+        } : undefined,
         shareLinks: {
-          direct: project.deployUrl!,
-          twitter: `https://twitter.com/intent/tweet?text=I just shipped ${encodeURIComponent(options.projectName)} with @Lovable!&url=${encodeURIComponent(project.deployUrl!)}`,
-          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(project.deployUrl!)}`,
+          direct: deployUrl,
+          twitter: `https://twitter.com/intent/tweet?text=I just shipped ${encodeURIComponent(options.projectName)} with @Lovable!&url=${encodeURIComponent(deployUrl)}`,
+          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(deployUrl)}`,
+          portfolio: `https://lovable.dev/portfolio/${project.id}`,
         },
+        creditsEarned: 5,
       };
 
       setDeployedProject(project);
@@ -94,11 +174,21 @@ const Index = () => {
     }, 2500);
   }, [sandbox, selectedTemplate]);
 
+  const handleShareToPortfolio = useCallback(() => {
+    if (deployedProject) {
+      setDeployedProject({
+        ...deployedProject,
+        isInPortfolio: true,
+      });
+    }
+  }, [deployedProject]);
+
   const handleCloseProofPage = useCallback(() => {
     setAppState('gallery');
     setSelectedTemplate(null);
     setDeployedProject(null);
     setProofPage(null);
+    setCurrentPrototype(null);
     destroySandbox();
   }, [destroySandbox]);
 
@@ -114,6 +204,19 @@ const Index = () => {
         project={deployedProject}
         proofPage={proofPage}
         onClose={handleCloseProofPage}
+        onShareToPortfolio={handleShareToPortfolio}
+      />
+    );
+  }
+
+  // Render prototype preview (before sandbox)
+  if (appState === 'prototype' && currentPrototype) {
+    return (
+      <PrototypePreview
+        prototype={currentPrototype}
+        template={selectedTemplate || undefined}
+        onBack={handleBackToGallery}
+        onTestInSandbox={handleTestInSandbox}
       />
     );
   }
@@ -125,7 +228,7 @@ const Index = () => {
         <SandboxView
           sandbox={sandbox}
           template={selectedTemplate}
-          onBack={handleBackToGallery}
+          onBack={handleBackToPrototype}
           onUpdateCustomizations={updateCustomizations}
           onRegenerateData={regenerateData}
           onSubmitFeedback={submitDataFeedback}
@@ -149,7 +252,11 @@ const Index = () => {
       <Header />
       
       <main>
-        <HeroSection onExploreTemplates={scrollToTemplates} />
+        <HeroSection 
+          onExploreTemplates={scrollToTemplates} 
+          onBuildFromPrompt={handleBuildFromPrompt}
+          isGenerating={isGeneratingPrototype}
+        />
         
         <div id="templates">
           <TemplateGallery onSelectTemplate={handleSelectTemplate} />
@@ -160,11 +267,12 @@ const Index = () => {
         <CTASection onExploreTemplates={scrollToTemplates} />
       </main>
 
-      {/* Sandbox creation modal */}
+      {/* Sandbox/Prototype creation modal */}
       <SandboxCreationModal
-        open={appState === 'creating-sandbox' || appState === 'forking'}
+        open={appState === 'creating-sandbox' || appState === 'forking' || appState === 'generating-prototype'}
         template={selectedTemplate}
-        onComplete={appState === 'creating-sandbox' ? handleSandboxCreated : () => {}}
+        onComplete={appState === 'creating-sandbox' ? handleSandboxCreated : appState === 'generating-prototype' ? () => {} : () => {}}
+        mode={appState === 'generating-prototype' ? 'prototype' : 'sandbox'}
       />
 
       {/* Footer */}
