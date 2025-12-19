@@ -134,15 +134,17 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
-  		boxShadow: {
-  			'2xs': 'var(--shadow-2xs)',
-  			xs: 'var(--shadow-xs)',
-  			sm: 'var(--shadow-sm)',
-  			md: 'var(--shadow-md)',
-  			lg: 'var(--shadow-lg)',
-  			xl: 'var(--shadow-xl)',
-  			'2xl': 'var(--shadow-2xl)'
-  		}
+		boxShadow: {
+			'2xs': 'var(--shadow-2xs)',
+			xs: 'var(--shadow-xs)',
+			sm: 'var(--shadow-sm)',
+			md: 'var(--shadow-md)',
+			lg: 'var(--shadow-lg)',
+			xl: 'var(--shadow-xl)',
+			'2xl': 'var(--shadow-2xl)',
+			'sandbox-glow': '0 0 20px hsl(var(--sandbox) / 0.4)',
+			'success-glow': '0 0 20px hsl(var(--success) / 0.4)'
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],

@@ -33,6 +33,9 @@ export function Header() {
             <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
               Pricing
             </Button>
+            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+              Portfolio
+            </Button>
           </nav>
 
           {/* Actions */}
@@ -62,6 +65,7 @@ export function Header() {
             <Button variant="ghost" className="justify-start">Templates</Button>
             <Button variant="ghost" className="justify-start">Docs</Button>
             <Button variant="ghost" className="justify-start">Pricing</Button>
+            <Button variant="ghost" className="justify-start">Portfolio</Button>
             <div className="border-t border-border my-2" />
             <Button variant="ghost" className="justify-start">Sign In</Button>
             <Button variant="default">Get Started</Button>

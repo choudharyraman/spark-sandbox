@@ -62,31 +62,34 @@ export function SandboxView({
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-sandbox/5">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-sandbox-border">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-sandbox-border/50 shadow-sm">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={onBack} className="gap-2">
+              <Button variant="ghost" size="sm" onClick={onBack} className="gap-2 hover:bg-muted/80">
                 <ArrowLeft className="w-4 h-4" />
-                Back to templates
+                <span className="hidden sm:inline">Back</span>
               </Button>
-              <div className="h-6 w-px bg-border" />
-              <div className="flex items-center gap-2">
-                <Badge variant="sandbox-solid">Sandbox</Badge>
-                <span className="font-medium">{template.name}</span>
+              <div className="h-6 w-px bg-border/50" />
+              <div className="flex items-center gap-3">
+                <Badge variant="sandbox-solid" className="animate-pulse-soft shadow-sandbox-glow">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Sandbox Mode
+                </Badge>
+                <span className="font-display font-semibold text-foreground">{template.name}</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <SandboxTimer expiresAt={sandbox.expiresAt} />
               
-              <div className="hidden sm:flex items-center gap-1 p-1 bg-muted rounded-lg">
+              <div className="hidden md:flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border/50">
                 <Button
                   variant={deviceMode === 'desktop' ? 'default' : 'ghost'}
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 rounded-lg"
                   onClick={() => setDeviceMode('desktop')}
                 >
                   <Monitor className="w-4 h-4" />
@@ -94,7 +97,7 @@ export function SandboxView({
                 <Button
                   variant={deviceMode === 'tablet' ? 'default' : 'ghost'}
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 rounded-lg"
                   onClick={() => setDeviceMode('tablet')}
                 >
                   <Tablet className="w-4 h-4" />
@@ -102,19 +105,19 @@ export function SandboxView({
                 <Button
                   variant={deviceMode === 'mobile' ? 'default' : 'ghost'}
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 rounded-lg"
                   onClick={() => setDeviceMode('mobile')}
                 >
                   <Smartphone className="w-4 h-4" />
                 </Button>
               </div>
 
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hidden sm:flex border-border/50 hover:bg-muted/80">
                 <ExternalLink className="w-4 h-4" />
-                Open in new tab
+                Preview
               </Button>
 
-              <Button variant="success" size="sm" onClick={onForkProject} className="gap-2">
+              <Button variant="success" size="sm" onClick={onForkProject} className="gap-2 shadow-success-glow hover:shadow-success-glow/80 transition-shadow">
                 <Rocket className="w-4 h-4" />
                 Go Live
               </Button>
@@ -123,20 +126,21 @@ export function SandboxView({
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex gap-6">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex gap-8">
           {/* Main preview area */}
           <div className="flex-1 min-w-0">
             {/* Preview frame */}
-            <Card className="overflow-hidden border-sandbox-border">
-              <div className="bg-muted/50 p-3 flex items-center justify-between border-b border-border">
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                    <div className="w-3 h-3 rounded-full bg-sandbox/60" />
-                    <div className="w-3 h-3 rounded-full bg-success/60" />
+            <Card className="overflow-hidden border-sandbox-border/50 shadow-xl shadow-sandbox/5 rounded-2xl">
+              <div className="bg-gradient-to-r from-muted/80 to-muted/40 p-4 flex items-center justify-between border-b border-border/30">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 rounded-full bg-destructive/70 shadow-inner" />
+                    <div className="w-3 h-3 rounded-full bg-sandbox/70 shadow-inner" />
+                    <div className="w-3 h-3 rounded-full bg-success/70 shadow-inner" />
                   </div>
-                  <div className="ml-4 px-3 py-1 bg-background rounded-md text-xs text-muted-foreground font-mono">
+                  <div className="ml-3 px-4 py-1.5 bg-background/80 rounded-lg text-xs text-muted-foreground font-mono border border-border/30 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                     {sandbox.previewUrl}
                   </div>
                 </div>
@@ -144,15 +148,15 @@ export function SandboxView({
                   variant="ghost" 
                   size="sm" 
                   onClick={() => onResetSandbox()}
-                  className="gap-2 text-muted-foreground"
+                  className="gap-2 text-muted-foreground hover:text-foreground hover:bg-background/50"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
-                  Reset sandbox
+                  Reset
                 </Button>
               </div>
               
-              <div className="flex justify-center bg-muted/30 p-4 min-h-[600px]">
-                <div className={`${deviceWidths[deviceMode]} transition-all duration-300 bg-background rounded-lg shadow-xl overflow-hidden`}>
+              <div className="flex justify-center bg-gradient-to-b from-muted/20 to-muted/5 p-6 min-h-[600px]">
+                <div className={`${deviceWidths[deviceMode]} transition-all duration-500 ease-out bg-background rounded-xl shadow-2xl shadow-black/10 overflow-hidden border border-border/20`}>
                   {/* Simulated app content */}
                   <div className="h-[600px] overflow-hidden">
                     <SimulatedAppPreview template={template} customizations={sandbox.customizations} />
@@ -162,7 +166,7 @@ export function SandboxView({
             </Card>
 
             {/* Data feedback */}
-            <div className="mt-4">
+            <div className="mt-6">
               <DataQualityFeedback
                 feedback={sandbox.dataQuality}
                 onSubmitFeedback={onSubmitFeedback}
