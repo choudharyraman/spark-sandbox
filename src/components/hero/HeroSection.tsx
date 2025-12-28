@@ -10,11 +10,11 @@ import {
   Shield, 
   Clock, 
   LayoutTemplate, 
-  MessageSquare,
   MousePointerClick,
   Rocket,
   CheckCircle2,
-  Code2
+  Code2,
+  ArrowUpRight
 } from 'lucide-react';
 import { PromptBuilder } from './PromptBuilder';
 
@@ -35,98 +35,94 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
   ];
 
   return (
-    <section className="relative overflow-hidden pt-28 pb-20">
-      {/* Animated background */}
+    <section className="relative overflow-hidden pt-28 pb-20 min-h-screen">
+      {/* Brutalist grid background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-soft" />
-        <div className="absolute top-20 right-1/4 w-80 h-80 bg-sandbox/10 rounded-full blur-3xl animate-pulse-soft" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="absolute inset-0 striped-bg opacity-30" />
+        <div className="absolute top-0 left-0 w-1/2 h-full bg-accent/10" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10" />
         
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black_70%,transparent_110%)]" />
+        {/* Grid lines */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:6rem_6rem] opacity-20" />
       </div>
 
       <div className="container mx-auto px-4 relative">
-        <div className="max-w-5xl mx-auto">
-          {/* Announcement badge */}
-          <div className="flex justify-center mb-8 animate-fade-in">
-            <Badge 
-              variant="outline" 
-              className="px-4 py-2 text-sm font-medium bg-background/80 backdrop-blur-sm border-primary/20 hover:border-primary/40 transition-colors cursor-pointer group"
-            >
-              <Sparkles className="w-4 h-4 mr-2 text-primary" />
-              <span className="bg-gradient-to-r from-primary to-sandbox bg-clip-text text-transparent">
+        <div className="max-w-6xl mx-auto">
+          {/* Announcement banner */}
+          <div className="flex justify-start mb-12 animate-fade-in">
+            <div className="inline-flex items-center gap-3 px-4 py-2 bg-sandbox text-sandbox-foreground border-2 border-border shadow-md">
+              <Sparkles className="w-4 h-4" />
+              <span className="font-mono text-sm uppercase tracking-wider font-semibold">
                 Introducing Smart Sandbox
               </span>
-              <ArrowRight className="w-4 h-4 ml-2 text-muted-foreground group-hover:translate-x-1 transition-transform" />
-            </Badge>
+              <ArrowUpRight className="w-4 h-4" />
+            </div>
           </div>
 
-          {/* Main headline */}
-          <div className="text-center mb-12 animate-slide-up">
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-              <span className="block">Build faster with</span>
-              <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-primary via-sandbox to-primary bg-[length:200%_auto] animate-shimmer bg-clip-text text-transparent">
-                  instant sandboxes
+          {/* Main headline - Asymmetric layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+            <div className="lg:col-span-7 animate-slide-up">
+              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter leading-[0.9] uppercase">
+                <span className="block">Build</span>
+                <span className="block text-primary">Faster</span>
+                <span className="block">With</span>
+                <span className="inline-block bg-accent text-accent-foreground px-4 py-1 border-2 border-border shadow-lg -rotate-1">
+                  Sandboxes
                 </span>
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-primary/30" viewBox="0 0 200 10" preserveAspectRatio="none">
-                  <path d="M0,5 Q50,0 100,5 T200,5" stroke="currentColor" strokeWidth="2" fill="none" />
-                </svg>
-              </span>
-            </h1>
+              </h1>
+            </div>
             
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Pick a template, explore with realistic data, and ship your app — 
-              <span className="text-foreground font-medium"> all without writing a single line of config.</span>
-            </p>
-          </div>
-
-          {/* Feature pills */}
-          <div className="flex flex-wrap justify-center gap-3 mb-10 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            {[
-              { icon: Zap, label: 'No setup required', color: 'text-sandbox' },
-              { icon: Shield, label: 'Safe to experiment', color: 'text-success' },
-              { icon: Clock, label: '2-hour sandbox', color: 'text-primary' },
-            ].map((pill, index) => (
-              <div 
-                key={pill.label}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 text-sm font-medium shadow-sm hover:shadow-md hover:border-primary/30 transition-all cursor-default"
-              >
-                <pill.icon className={`w-4 h-4 ${pill.color}`} />
-                <span>{pill.label}</span>
+            <div className="lg:col-span-5 flex flex-col justify-end animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <p className="text-xl text-muted-foreground leading-relaxed mb-8 font-serif">
+                Pick a template, explore with realistic data, and ship your app — 
+                <span className="text-foreground font-semibold"> all without writing a single line of config.</span>
+              </p>
+              
+              {/* Feature pills - stacked */}
+              <div className="flex flex-col gap-2">
+                {[
+                  { icon: Zap, label: 'No setup required', color: 'bg-sandbox' },
+                  { icon: Shield, label: 'Safe to experiment', color: 'bg-success' },
+                  { icon: Clock, label: '2-hour sandbox', color: 'bg-primary' },
+                ].map((pill) => (
+                  <div 
+                    key={pill.label}
+                    className={`flex items-center gap-3 px-4 py-3 ${pill.color} text-foreground border-2 border-border shadow-sm font-mono text-sm uppercase tracking-wide`}
+                  >
+                    <pill.icon className="w-4 h-4" />
+                    <span>{pill.label}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* Action tabs */}
-          <div className="max-w-2xl mx-auto mb-16 animate-scale-in" style={{ animationDelay: '0.3s' }}>
+          {/* Action tabs - Brutalist style */}
+          <div className="max-w-3xl mb-20 animate-scale-in" style={{ animationDelay: '0.3s' }}>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 h-14 p-1.5 bg-muted/50 backdrop-blur-sm">
+              <TabsList className="grid w-full grid-cols-2 h-16 p-0 bg-transparent gap-0 border-2 border-border">
                 <TabsTrigger 
                   value="templates" 
-                  className="h-full text-base font-medium data-[state=active]:bg-background data-[state=active]:shadow-md transition-all"
+                  className="h-full text-base font-semibold uppercase tracking-wide data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=inactive]:bg-background border-r-2 border-border rounded-none"
                 >
-                  <LayoutTemplate className="w-4 h-4 mr-2" />
+                  <LayoutTemplate className="w-5 h-5 mr-2" />
                   Browse Templates
                 </TabsTrigger>
                 <TabsTrigger 
                   value="prompt"
-                  className="h-full text-base font-medium data-[state=active]:bg-background data-[state=active]:shadow-md transition-all"
+                  className="h-full text-base font-semibold uppercase tracking-wide data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=inactive]:bg-background rounded-none"
                 >
-                  <Code2 className="w-4 h-4 mr-2" />
+                  <Code2 className="w-5 h-5 mr-2" />
                   Build from Prompt
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="templates" className="mt-6">
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-start gap-4">
                   <Button 
-                    variant="hero" 
-                    size="xl" 
+                    size="lg" 
                     onClick={onExploreTemplates}
-                    className="w-full sm:w-auto gap-2 group"
+                    className="gap-2 group bg-primary text-primary-foreground border-2 border-border shadow-md hover:shadow-lg hover:-translate-x-1 hover:-translate-y-1 transition-all font-semibold uppercase tracking-wide h-14 px-8"
                   >
                     <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                     Explore Templates
@@ -134,8 +130,8 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
                   </Button>
                   <Button 
                     variant="outline" 
-                    size="xl" 
-                    className="w-full sm:w-auto gap-2 group"
+                    size="lg" 
+                    className="gap-2 group border-2 border-border shadow-md hover:shadow-lg hover:-translate-x-1 hover:-translate-y-1 transition-all font-semibold uppercase tracking-wide h-14 px-8"
                   >
                     <Play className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     Watch Demo
@@ -152,46 +148,39 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
             </Tabs>
           </div>
 
-          {/* Hero visual */}
-          <div className="relative max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            {/* Glow effects */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-sandbox/20 to-primary/20 rounded-3xl blur-2xl opacity-50" />
-            
+          {/* Hero visual - Brutalist browser mockup */}
+          <div className="relative max-w-5xl mx-auto animate-fade-in" style={{ animationDelay: '0.4s' }}>
             {/* Browser mockup */}
-            <div className="relative rounded-2xl overflow-hidden border border-border/50 bg-card shadow-2xl">
+            <div className="relative border-2 border-border bg-card shadow-xl">
               {/* Browser chrome */}
-              <div className="flex items-center gap-3 px-4 py-3 bg-muted/50 border-b border-border">
+              <div className="flex items-center justify-between px-4 py-3 bg-secondary border-b-2 border-border">
                 <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-destructive/80" />
-                  <div className="w-3 h-3 rounded-full bg-sandbox/80" />
-                  <div className="w-3 h-3 rounded-full bg-success/80" />
+                  <div className="w-4 h-4 bg-destructive border border-border" />
+                  <div className="w-4 h-4 bg-accent border border-border" />
+                  <div className="w-4 h-4 bg-success border border-border" />
                 </div>
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-background/80 border border-border/50 text-sm text-muted-foreground">
-                    <Shield className="w-3.5 h-3.5 text-success" />
-                    <span>sandbox.lovable.app/preview</span>
-                  </div>
+                <div className="flex items-center gap-2 px-4 py-1 bg-background border-2 border-border font-mono text-sm">
+                  <Shield className="w-3.5 h-3.5 text-success" />
+                  <span>sandbox.lovable.app/preview</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="sandbox" className="text-xs">
-                    <Clock className="w-3 h-3 mr-1" />
-                    1:58:30
-                  </Badge>
-                </div>
+                <Badge className="bg-sandbox text-sandbox-foreground border-2 border-border font-mono text-xs uppercase">
+                  <Clock className="w-3 h-3 mr-1" />
+                  1:58:30
+                </Badge>
               </div>
 
               {/* Preview content */}
-              <div className="relative aspect-[16/9] bg-gradient-to-br from-background to-muted/30 overflow-hidden">
+              <div className="relative aspect-[16/9] bg-background overflow-hidden">
                 {/* Dashboard mockup */}
                 <div className="absolute inset-4 grid grid-cols-12 gap-4">
                   {/* Sidebar */}
-                  <div className="col-span-2 bg-card/50 backdrop-blur-sm rounded-xl border border-border/30 p-3 space-y-3">
-                    <div className="h-8 w-full rounded-lg bg-primary/20 animate-pulse" />
+                  <div className="col-span-2 bg-card border-2 border-border p-3 space-y-3">
+                    <div className="h-10 w-full bg-primary border-2 border-border" />
                     <div className="space-y-2">
                       {[...Array(5)].map((_, i) => (
                         <div 
                           key={i} 
-                          className="h-6 rounded-md bg-muted/50"
+                          className="h-8 bg-muted border border-border"
                           style={{ width: `${60 + Math.random() * 40}%` }}
                         />
                       ))}
@@ -202,30 +191,30 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
                   <div className="col-span-10 space-y-4">
                     {/* Header */}
                     <div className="flex items-center justify-between">
-                      <div className="h-8 w-48 rounded-lg bg-muted/50" />
+                      <div className="h-10 w-48 bg-muted border-2 border-border" />
                       <div className="flex gap-2">
-                        <div className="h-8 w-24 rounded-lg bg-primary/20" />
-                        <div className="h-8 w-24 rounded-lg bg-success/20" />
+                        <div className="h-10 w-24 bg-primary border-2 border-border" />
+                        <div className="h-10 w-24 bg-success border-2 border-border" />
                       </div>
                     </div>
                     
                     {/* Stats cards */}
                     <div className="grid grid-cols-4 gap-3">
                       {[...Array(4)].map((_, i) => (
-                        <div key={i} className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/30 p-4 space-y-2">
-                          <div className="h-4 w-16 rounded bg-muted/50" />
-                          <div className="h-6 w-20 rounded bg-primary/30" />
+                        <div key={i} className="bg-card border-2 border-border p-4 space-y-2">
+                          <div className="h-4 w-16 bg-muted" />
+                          <div className="h-8 w-20 bg-accent border-2 border-border" />
                         </div>
                       ))}
                     </div>
                     
                     {/* Chart area */}
-                    <div className="bg-card/50 backdrop-blur-sm rounded-xl border border-border/30 p-4 h-40">
+                    <div className="bg-card border-2 border-border p-4 h-40">
                       <div className="flex items-end justify-between h-full gap-2">
                         {[...Array(12)].map((_, i) => (
                           <div 
                             key={i}
-                            className="flex-1 rounded-t-lg bg-gradient-to-t from-primary/40 to-primary/20"
+                            className="flex-1 bg-primary border-2 border-border"
                             style={{ height: `${30 + Math.random() * 70}%` }}
                           />
                         ))}
@@ -235,7 +224,7 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
                 </div>
 
                 {/* Interactive overlay */}
-                <div className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-lg bg-sandbox/90 backdrop-blur-sm text-sandbox-foreground text-sm font-medium shadow-lg animate-bounce">
+                <div className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-sandbox text-sandbox-foreground border-2 border-border shadow-md font-mono text-sm uppercase tracking-wide animate-bounce-slow">
                   <MousePointerClick className="w-4 h-4" />
                   Interactive Preview
                 </div>
@@ -243,23 +232,23 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
             </div>
 
             {/* Floating badges */}
-            <div className="absolute -left-4 top-1/4 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-card/90 backdrop-blur-sm border border-border/50 shadow-lg animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <div className="absolute -left-6 top-1/4 hidden lg:flex items-center gap-2 px-4 py-3 bg-background border-2 border-border shadow-lg rotate-[-2deg] animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <Rocket className="w-5 h-5 text-primary" />
-              <span className="text-sm font-medium">Deploy in seconds</span>
+              <span className="font-mono text-sm uppercase tracking-wide">Deploy in seconds</span>
             </div>
             
-            <div className="absolute -right-4 top-1/3 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-card/90 backdrop-blur-sm border border-border/50 shadow-lg animate-fade-in" style={{ animationDelay: '0.7s' }}>
-              <Zap className="w-5 h-5 text-sandbox" />
-              <span className="text-sm font-medium">AI-powered data</span>
+            <div className="absolute -right-6 top-1/3 hidden lg:flex items-center gap-2 px-4 py-3 bg-accent text-accent-foreground border-2 border-border shadow-lg rotate-[2deg] animate-fade-in" style={{ animationDelay: '0.7s' }}>
+              <Zap className="w-5 h-5" />
+              <span className="font-mono text-sm uppercase tracking-wide">AI-powered data</span>
             </div>
           </div>
 
           {/* Highlights list */}
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-12 text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: '0.5s' }}>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-4 mt-16 animate-fade-in" style={{ animationDelay: '0.5s' }}>
             {highlights.map((highlight) => (
-              <div key={highlight} className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-success" />
-                <span>{highlight}</span>
+              <div key={highlight} className="flex items-center gap-2 px-4 py-2 bg-card border-2 border-border shadow-sm">
+                <CheckCircle2 className="w-5 h-5 text-success" />
+                <span className="font-mono text-sm uppercase tracking-wide">{highlight}</span>
               </div>
             ))}
           </div>
