@@ -252,7 +252,7 @@ const Index = () => {
 
   // Render gallery view (default)
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div className="min-h-screen bg-background overflow-x-hidden page-transition">
       <Header />
       
       <main>
@@ -293,8 +293,8 @@ const Index = () => {
         <div className="container mx-auto px-4 py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
+              <div className="flex items-center gap-2 mb-4 group">
+                <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Sparkles className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <span className="font-display font-bold text-xl">Lovable</span>
@@ -307,30 +307,30 @@ const Index = () => {
             <div>
               <h4 className="font-medium mb-4">Product</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Templates</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Changelog</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Templates</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Features</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Pricing</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Changelog</a></li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-medium mb-4">Resources</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Guides</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Support</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Documentation</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Guides</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Blog</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Support</a></li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-medium mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Terms</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">About</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Careers</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Privacy</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors duration-300 link-underline">Terms</a></li>
               </ul>
             </div>
           </div>
@@ -340,9 +340,9 @@ const Index = () => {
               © 2024 Lovable. All rights reserved.
             </p>
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Twitter</a>
-              <a href="#" className="hover:text-foreground transition-colors">GitHub</a>
-              <a href="#" className="hover:text-foreground transition-colors">Discord</a>
+              <a href="#" className="hover:text-foreground transition-colors duration-300 hover:scale-105">Twitter</a>
+              <a href="#" className="hover:text-foreground transition-colors duration-300 hover:scale-105">GitHub</a>
+              <a href="#" className="hover:text-foreground transition-colors duration-300 hover:scale-105">Discord</a>
             </div>
           </div>
         </div>

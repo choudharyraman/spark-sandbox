@@ -11,6 +11,7 @@ import {
   Shield,
   Clock
 } from 'lucide-react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const features = [
   {
@@ -64,12 +65,21 @@ const stats = [
 ];
 
 export function FeaturesSection() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation();
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
+
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-24 bg-muted/30 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4">How it works</Badge>
+        <div 
+          ref={headerRef}
+          className={`text-center mb-16 transition-all duration-700 ${
+            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
+        >
+          <Badge variant="outline" className="mb-4 animate-bounce-soft">How it works</Badge>
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
             From browsing to shipping in 6 steps
           </h2>
@@ -79,9 +89,18 @@ export function FeaturesSection() {
         </div>
 
         {/* Stats */}
-        <div className="flex flex-wrap justify-center gap-8 mb-16">
-          {stats.map(stat => (
-            <div key={stat.label} className="flex items-center gap-3 px-6 py-3 rounded-xl bg-card border border-border">
+        <div ref={statsRef} className="flex flex-wrap justify-center gap-8 mb-16">
+          {stats.map((stat, index) => (
+            <div 
+              key={stat.label} 
+              className="flex items-center gap-3 px-6 py-3 rounded-xl bg-card border border-border hover-lift"
+              style={{ 
+                transitionDelay: statsVisible ? `${index * 100}ms` : '0ms',
+                opacity: statsVisible ? 1 : 0,
+                transform: statsVisible ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
               <stat.icon className="w-5 h-5 text-sandbox" />
               <div>
                 <p className="font-display text-2xl font-bold">{stat.value}</p>
@@ -92,14 +111,19 @@ export function FeaturesSection() {
         </div>
 
         {/* Feature grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Card 
               key={feature.title}
-              className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="p-6 interactive-card group"
+              style={{ 
+                transitionDelay: gridVisible ? `${index * 80}ms` : '0ms',
+                opacity: gridVisible ? 1 : 0,
+                transform: gridVisible ? 'translateY(0)' : 'translateY(30px)',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
             >
-              <div className={`w-12 h-12 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4`}>
+              <div className={`w-12 h-12 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
                 <feature.icon className={`w-6 h-6 ${feature.color}`} />
               </div>
               <h3 className="font-display text-lg font-semibold mb-2">
