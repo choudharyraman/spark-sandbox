@@ -13,7 +13,7 @@ export function TrustedBySection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="py-12 border-y border-border/50 bg-muted/20 overflow-hidden">
+    <section className="py-6 border-y border-border/50 bg-muted/20 overflow-hidden">
       <div className="container mx-auto px-4">
         <div 
           ref={ref}
@@ -21,11 +21,11 @@ export function TrustedBySection() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <p className="text-sm text-muted-foreground mb-8 uppercase tracking-wider font-medium">
+          <p className="text-xs text-muted-foreground mb-4 uppercase tracking-wider font-medium">
             Trusted by innovative teams worldwide
           </p>
           
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
             {companies.map((company, index) => (
               <div 
                 key={company.name}
@@ -36,10 +36,10 @@ export function TrustedBySection() {
                   transform: isVisible ? 'translateY(0)' : 'translateY(10px)'
                 }}
               >
-                <div className="w-10 h-10 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center font-display font-bold text-sm group-hover:border-primary/30 group-hover:bg-primary/5 group-hover:scale-110 transition-all duration-300">
+                <div className="w-8 h-8 rounded-lg bg-muted/50 border border-border/50 flex items-center justify-center font-display font-bold text-xs group-hover:border-primary/30 group-hover:bg-primary/5 group-hover:scale-110 transition-all duration-300">
                   {company.logo}
                 </div>
-                <span className="font-medium hidden sm:inline">{company.name}</span>
+                <span className="font-medium text-sm hidden sm:inline">{company.name}</span>
               </div>
             ))}
           </div>

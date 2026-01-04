@@ -253,7 +253,11 @@ const Index = () => {
   // Render gallery view (default)
   return (
     <div className="min-h-screen bg-background overflow-x-hidden page-transition">
-      <Header />
+      <Header 
+        onTemplatesClick={scrollToTemplates}
+        onPortfolioClick={() => window.open('https://lovable.dev/portfolio', '_blank')}
+        onGetStartedClick={scrollToTemplates}
+      />
       
       <main>
         <HeroSection 

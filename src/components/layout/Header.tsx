@@ -2,9 +2,15 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, Menu, X, ChevronDown, Moon, Sun } from 'lucide-react';
+import { Sparkles, Menu, X, Moon, Sun } from 'lucide-react';
 
-export function Header() {
+interface HeaderProps {
+  onTemplatesClick?: () => void;
+  onPortfolioClick?: () => void;
+  onGetStartedClick?: () => void;
+}
+
+export function Header({ onTemplatesClick, onPortfolioClick, onGetStartedClick }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -19,6 +25,24 @@ export function Header() {
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleNavClick = (item: string) => {
+    setMobileMenuOpen(false);
+    switch (item) {
+      case 'Templates':
+        onTemplatesClick?.();
+        break;
+      case 'Portfolio':
+        onPortfolioClick?.();
+        break;
+      case 'Docs':
+        window.open('https://docs.lovable.dev', '_blank');
+        break;
+      case 'Pricing':
+        window.open('https://lovable.dev/pricing', '_blank');
+        break;
+    }
   };
 
   return (
@@ -50,9 +74,9 @@ export function Header() {
                 variant="ghost" 
                 className="text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline"
                 style={{ animationDelay: `${index * 50}ms` }}
+                onClick={() => handleNavClick(item)}
               >
                 {item}
-                {item === 'Templates' && <ChevronDown className="w-4 h-4 ml-1" />}
               </Button>
             ))}
           </nav>
@@ -72,7 +96,11 @@ export function Header() {
             <Button variant="ghost" className="hidden sm:inline-flex hover-scale-subtle">
               Sign In
             </Button>
-            <Button variant="default" className="hidden sm:inline-flex hover-lift">
+            <Button 
+              variant="default" 
+              className="hidden sm:inline-flex hover-lift"
+              onClick={onGetStartedClick}
+            >
               Get Started
             </Button>
             <Button 
@@ -107,13 +135,14 @@ export function Header() {
                 opacity: mobileMenuOpen ? 1 : 0,
                 transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-10px)'
               }}
+              onClick={() => handleNavClick(item)}
             >
               {item}
             </Button>
           ))}
           <div className="border-t border-border my-2" />
           <Button variant="ghost" className="justify-start">Sign In</Button>
-          <Button variant="default">Get Started</Button>
+          <Button variant="default" onClick={onGetStartedClick}>Get Started</Button>
         </nav>
       </div>
     </header>
