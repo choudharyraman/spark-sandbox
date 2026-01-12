@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -26,6 +26,20 @@ interface HeroSectionProps {
 
 export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGenerating = false }: HeroSectionProps) {
   const [activeTab, setActiveTab] = useState<string>('templates');
+  const [scrollOpacity, setScrollOpacity] = useState(1);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const fadeStart = 0;
+      const fadeEnd = 600;
+      const opacity = Math.max(0, 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart));
+      setScrollOpacity(opacity);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const highlights = [
     'Instant preview with real data',
@@ -36,8 +50,11 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
 
   return (
     <section className="relative overflow-hidden pt-28 pb-20">
-      {/* Animated background */}
-      <div className="absolute inset-0 -z-10">
+      {/* Animated background with scroll fade */}
+      <div 
+        className="absolute inset-0 -z-10 transition-opacity duration-100"
+        style={{ opacity: scrollOpacity }}
+      >
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
         <div className="absolute top-20 right-1/4 w-80 h-80 bg-sandbox/10 rounded-full blur-3xl animate-float-delayed" />
@@ -154,7 +171,7 @@ export function HeroSection({ onExploreTemplates, onBuildFromPrompt, isGeneratin
           </div>
 
           {/* Hero visual */}
-          <div className="relative max-w-4xl mx-auto animate-blur-fade" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
+          <div className="relative max-w-4xl mx-auto animate-scale-fade" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
             {/* Glow effects */}
             <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-sandbox/20 to-primary/20 rounded-3xl blur-2xl opacity-50 animate-glow-pulse" />
             
